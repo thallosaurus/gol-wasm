@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="module">
+        import { randomize, buffer, WIDTH, iterate, ALIVE, getAsString, setWorldSize } from "./build/debug.js";
+        // window.addEventListener("load", (ev) => {
+        const canvas = document.querySelector("#canvas");
+
+        let lastRun = 0;
+
+        const loop = (ts) => {
+            if (Date.now() > lastRun + 50) {
+
+                iterate();
+                lastRun = Date.now();
+                canvas.innerText = getAsString();
+            }
+            requestAnimationFrame(loop);
+        }
+
+
+        setWorldSize(30, 20);
+        randomize();
+        // setInterval(() => {
+        // }, 250);
+        requestAnimationFrame(loop);
+    </script>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            background-color: black;
+            color: white;
+        }
+        #canvas {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+
+        <h1>Game of Life</h1>
+        <pre id="canvas">
+            
+        </pre>
+    </div>
+</body>
+
+</html>
