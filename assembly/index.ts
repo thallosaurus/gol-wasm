@@ -1,9 +1,11 @@
+import GenerationBuffer from "./GenerationBuffer";
+
 // The entry file of your WebAssembly module.
 let WIDTH: u32 = 0;
 let HEIGHT: u32 = 0;
 
 export let buffer = new Uint8Array(WIDTH * HEIGHT);
-
+let genBuffer = new GenerationBuffer(WIDTH, HEIGHT);
 export const ALIVE: u8 = 1;
 export const DEAD: u8 = 0;
 
@@ -39,6 +41,7 @@ export function iterate(): void {
   }
 
   buffer.set(copy);
+  genBuffer.addGeneration(copy);
 }
 
 function rules(cell: u8, neighbors: u8): u8 {
@@ -79,6 +82,7 @@ export function setWorldSize(w: u32, h: u32): void {
   WIDTH = w;
   HEIGHT = h;
   buffer = new Uint8Array(WIDTH * HEIGHT);
+  genBuffer = new GenerationBuffer(w, h);
 }
 
 export function getWorldPointer(): usize {
@@ -97,4 +101,8 @@ export function getAsString(): string {
   }
 
   return str;
+}
+
+export function getGenerationBufferPointer(): usize {
+  return genBuffer.buffer.dataStart;
 }
