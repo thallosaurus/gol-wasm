@@ -38,10 +38,12 @@
         let lastRun = 0;
 
         const loop = (ts) => {
-            //if (Date.now() > lastRun + 10) {
+            if (Date.now() > lastRun + 100) {
 
                 iterate();
+              
                 lastRun = Date.now();
+                }
 
                 if (mode == "can") {
                     ctx.fillStyle = "black";
