@@ -20,6 +20,10 @@
 
         ctx.canvas.width = w * TILE_WIDTH;
         ctx.canvas.height = h * TILE_HEIGHT;
+        
+        ctx.canvas.addEventListener("click",(ev) => {
+          randomize();
+        });
 
         controls.addEventListener("change", (ev) => {
             console.log(ev.target.id);
