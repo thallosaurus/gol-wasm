@@ -1,6 +1,6 @@
 // The entry file of your WebAssembly module.
-export let WIDTH: u32 = 40;
-export let HEIGHT: u32 = 40;
+let WIDTH: u32 = 0;
+let HEIGHT: u32 = 0;
 
 export let buffer = new Uint8Array(WIDTH * HEIGHT);
 
@@ -79,6 +79,10 @@ export function setWorldSize(w: u32, h: u32): void {
   WIDTH = w;
   HEIGHT = h;
   buffer = new Uint8Array(WIDTH * HEIGHT);
+}
+
+export function getWorldPointer(): usize {
+  return buffer.dataStart;
 }
 
 export function getAsString(): string {

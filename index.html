@@ -3,10 +3,29 @@
 
 <head>
     <script type="module">
-        import { randomize, buffer, WIDTH, iterate, ALIVE, DEAD, setWorld, getAsString, setWorldSize } from "./build/release.js";
+        import { memory, randomize, buffer, iterate, ALIVE, DEAD, setWorld, getAsString, getWorldPointer, setWorldSize } from "./build/release.js";
         // window.addEventListener("load", (ev) => {
-        const canvas = document.querySelector("#canvas");
+        const canvas = document.querySelector("#precanvas");
+        const ctx = document.querySelector("#canvas").getContext("2d");
         const div = document.querySelector("div:has(pre)");
+        const controls = document.querySelector("#controls");
+
+        const TILE_WIDTH = 4;
+        const TILE_HEIGHT = 4;
+
+        const w = 255;
+        const h = 255;
+
+        let mode = document.querySelector("input[name='mode']:checked").id;
+
+        ctx.canvas.width = w * TILE_WIDTH;
+        ctx.canvas.height = h * TILE_HEIGHT;
+
+        controls.addEventListener("change", (ev) => {
+            console.log(ev.target.id);
+
+            mode = ev.target.id;
+        });
 
         window.addEventListener("keyup", (ev) => {
             iterate();
@@ -15,28 +34,57 @@
         let lastRun = 0;
 
         const loop = (ts) => {
-            if (Date.now() > lastRun + 50) {
+            //if (Date.now() > lastRun + 10) {
 
                 iterate();
                 lastRun = Date.now();
-                canvas.innerText = getAsString();
-            }
+
+                if (mode == "can") {
+                    ctx.fillStyle = "black";
+                    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                    let dv = new DataView(memory.buffer, getWorldPointer());
+                    for (let y = 0; y < h; y++) {
+                        for (let x = 0; x < h; x++) {
+                            let i = (y * w) + x;
+                            //console.log(
+                            let v = dv.getUint8(i);
+                            if (v == ALIVE) {
+                                ctx.fillStyle = "white";
+                                ctx.fillRect(x*TILE_WIDTH, y*TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
+                            }
+                        }
+                    }
+                } else {
+                    //let mem = memory
+                    canvas.innerText = getAsString();
+                }
+            //}
             requestAnimationFrame(loop);
         }
 
         //randomize();
         //setTimeout(() => {
-            /*let newWorld = new Uint8Array(63 * 64).map((v, i) => {
-                //console.log(i & 1);
-                return (i & 1) ? ALIVE : DEAD;
-            });
+        /*let newWorld = new Uint8Array(63 * 64).map((v, i) => {
+            //console.log(i & 1);
+            return (i & 1) ? ALIVE : DEAD;
+        });
 
-            console.log(newWorld);
-            
-            setWorld(newWorld);*/
-            //}, 10000);
-            setWorldSize(63, 64);
-            randomize();
+        console.log(newWorld);
+        
+        setWorld(newWorld);*/
+        //}, 10000);
+
+
+        setWorldSize(w, h);
+        //randomize();
+
+        let newWorld = new Uint8Array(w * h).map((v, i) => {
+            //console.log(i & 1);
+            return (i & 1) ? ALIVE : DEAD;
+        });
+        setWorld(newWorld);
+
+        console.log(getWorldPointer());
         requestAnimationFrame(loop);
     </script>
 
@@ -48,12 +96,17 @@
             background-color: black;
             color: white;
         }
+
         #canvas {
             display: inline-block;
         }
 
         h1 {
             text-align: center;
+        }
+
+        pre>* {
+            margin: 0px;
         }
     </style>
 </head>
@@ -62,9 +115,20 @@
     <div>
 
         <h1>Game of Life</h1>
-        <pre id="canvas">
-            
-        </pre>
+        <form id="controls">
+            <label for="pre">pre-Element</label>
+            <input type="radio" name="mode" id="pre">
+            <label for="can">Canvas-Element</label>
+            <input type="radio" name="mode" id="can" checked>
+        </form>
+
+        <pre id="precanvas">
+
+            </pre>
+
+        <canvas id="canvas">
+
+        </canvas>
     </div>
 </body>
 
