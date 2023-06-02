@@ -2,7 +2,7 @@
 export let WIDTH: u32 = 40;
 export let HEIGHT: u32 = 40;
 
-export const buffer = new Uint8Array(WIDTH * HEIGHT);
+export let buffer = new Uint8Array(WIDTH * HEIGHT);
 
 export const ALIVE: u8 = 1;
 export const DEAD: u8 = 0;
@@ -78,6 +78,7 @@ export function setWorld(preset: Uint8Array): void {
 export function setWorldSize(w: u32, h: u32): void {
   WIDTH = w;
   HEIGHT = h;
+  buffer = new Uint8Array(WIDTH * HEIGHT);
 }
 
 export function getAsString(): string {

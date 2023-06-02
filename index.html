@@ -3,9 +3,14 @@
 
 <head>
     <script type="module">
-        import { randomize, buffer, WIDTH, iterate, ALIVE, getAsString, setWorldSize } from "./build/release.js";
+        import { randomize, buffer, WIDTH, iterate, ALIVE, DEAD, setWorld, getAsString, setWorldSize } from "./build/release.js";
         // window.addEventListener("load", (ev) => {
         const canvas = document.querySelector("#canvas");
+        const div = document.querySelector("div:has(pre)");
+
+        window.addEventListener("keyup", (ev) => {
+            iterate();
+        });
 
         let lastRun = 0;
 
@@ -19,11 +24,19 @@
             requestAnimationFrame(loop);
         }
 
+        //randomize();
+        //setTimeout(() => {
+            /*let newWorld = new Uint8Array(63 * 64).map((v, i) => {
+                //console.log(i & 1);
+                return (i & 1) ? ALIVE : DEAD;
+            });
 
-        // setWorldSize(30, 20);
-        randomize();
-        // setInterval(() => {
-        // }, 250);
+            console.log(newWorld);
+            
+            setWorld(newWorld);*/
+            //}, 10000);
+            setWorldSize(63, 64);
+            randomize();
         requestAnimationFrame(loop);
     </script>
 
