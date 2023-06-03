@@ -20,5 +20,8 @@
     "asbuild": "npm run asbuild:debug && npm run asbuild:release",
     "test": "node tests",
     "start": "npx serve ."
+  },
+  "dependencies": {
+    "as-wasi": "^0.6.0"
   }
 }
