@@ -16,7 +16,7 @@
       "noAssert": false
     },
     "wasi": {
-      "extends": "./node_modules/as-wasi/bindings.json",
+      "extends": "./node_modules/@assemblyscript/wasi-shim/asconfig.json",
       "outFile": "build/wasi.wasm",
       "textFile": "build/wasi.wat"
     }

@@ -13,6 +13,6 @@ abi = "wasi"
 wasi = "0.0.0-unstable"
 
 [[command]]
-name = "gol-wasme"
+name = "gol-wasm"
 module = "game-of-life"
 runner = "wasi@unstable_"

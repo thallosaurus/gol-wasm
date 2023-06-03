@@ -1,11 +1,12 @@
 import {
-    Console,
-    Date,
-    CommandLine,
-    Process
-} from 'as-wasi/assembly';
+    wasi_process
+} from "@assemblyscript/wasi-shim/assembly/wasi_process";
 
-import { wasi_crypto } from '@assemblyscript/wasi-shim/assembly/wasi_crypto';
+import {
+    wasi_Date as Date
+} from "@assemblyscript/wasi-shim/assembly/wasi_date";
+
+//import { wasi_crypto } from '@assemblyscript/wasi-shim/assembly/wasi_crypto';
 
 import { randomize, buffer, iterate, ALIVE, DEAD, setWorld, getAsStringDebug, getWorldPointer, getGenerationBufferPointer, getGenerationBuffer, setWorldSize } from "./GameOfLife";
 //import styles from 'ansi-styles';
@@ -21,11 +22,12 @@ const HIDE_CURSOR = ESC + "[?25l";
 const SHOW_CURSOR = ESC + "[?25h";
 
 export function main(): void {
+    //parseArguments(CommandLine.all);
     setWorldSize(238, 67);
     randomize();
     //Console.log(d.toString());
-    //Console.write(CLEAR, false);
-    //Console.write(HIDE_CURSOR, false);
+    write(CLEAR);
+    write(HIDE_CURSOR);
     let running = true;
 
     let lastRun = Date.now();
@@ -33,15 +35,24 @@ export function main(): void {
         if (lastRun + 10 < Date.now()) {
             lastRun = Date.now();
 
+            /*let stdin = Descriptor.Stdin.read();
+            if (stdin) {
+                Console.log(stdin.toString());
+            }*/
+
             iterate();
-            
-            Console.write(HOME, false);
+
+            //Console.write(HOME, false);
+            write(HOME);
             //Console.log(getGenerationBuffer().toString());
             //streamBuffer(buffer, getGenerationBuffer());
-            Console.write(bufferToAnsi(buffer, getGenerationBuffer()), false);
+            write(bufferToAnsi(buffer, getGenerationBuffer()));
         }
         //Console.write(RESET);
+        write(RESET);
     }
+
+
     //Console.write(ESC + "[48;2;2;3;99 179m Select RGB foreground color", false);
 }
 
@@ -52,7 +63,7 @@ function streamBuffer(fgbuf: Uint8Array, bgbuf: Uint8Array): void {
         let fg_val = fgbuf.at(i);
         //let char_ = fg_val == ALIVE ? "*" : " ";
 
-        Console.write(getColorCell(fg_val, bg_val), false);
+        //Console.write(getColorCell(fg_val, bg_val), false);
     }
 }
 
@@ -95,7 +106,7 @@ function rgbToAnsi(msg: string, fr: u8, fg: u8, fb: u8, br: u8, bg: u8, bb: u8):
 // @ts-ignore: decorator
 @global
 export function wasiabort(param0: i32, param1: i32, param2: i32, param3: i32): void {
-    //console.log(param0.toString() + param1.toString() + param2.toString() + param3.toString());
+    //Console.log(param0.toString() + param1.toString() + param2.toString() + param3.toString());
 }
 
 // @ts-ignore: decorator
@@ -116,4 +127,19 @@ export function seed(): f64 {
 @global
 export function _start(): void {
     main();
+}
+
+declare interface ParsedArgument {
+    key: string,
+    value: string
+}
+
+function parseArguments(str: Array<string>): void /* Array<ParsedArgument> */ {
+    //Console.log(str.toString());
+}
+
+let stderr = wasi_process.stderr;
+
+function write(msg: string): void {
+    stderr.write(msg);
 }
