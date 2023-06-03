@@ -1,3 +1,4 @@
+
 import GenerationBuffer from "./GenerationBuffer";
 
 // The entry file of your WebAssembly module.
@@ -107,3 +108,12 @@ export function getAsString(): string {
 export function getGenerationBufferPointer(): usize {
   return genBuffer.buffer.dataStart;
 }
+
+/* Create an environ instance
+let env = new Environ();
+
+// Get the HOME Environment variable
+let home = env.get("HOME")!;
+
+// Log the HOME string to stdout
+Console.log(home);*/
