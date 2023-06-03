@@ -35,7 +35,7 @@ jobs:
         run: yarn
 
       - name: Build project
-        run: yarn asbuild:release
+        run: yarn asbuild
 
       - name: Move Artifacts
         run: ./move_artifact.sh
