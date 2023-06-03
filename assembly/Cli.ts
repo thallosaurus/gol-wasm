@@ -1,5 +1,6 @@
 import {
     Console,
+    Date,
     CommandLine,
     Process
 } from 'as-wasi/assembly';
@@ -22,16 +23,23 @@ const SHOW_CURSOR = ESC + "[?25h";
 export function main(): void {
     setWorldSize(238, 67);
     randomize();
-    Console.write(CLEAR, false);
-    Console.write(HIDE_CURSOR, false);
-    while (1) {
+    //Console.log(d.toString());
+    //Console.write(CLEAR, false);
+    //Console.write(HIDE_CURSOR, false);
+    let running = true;
 
-        iterate();
+    let lastRun = Date.now();
+    while (running) {
+        if (lastRun + 10 < Date.now()) {
+            lastRun = Date.now();
 
-        Console.write(HOME, false);
-        //Console.log(getGenerationBuffer().toString());
-        //streamBuffer(buffer, getGenerationBuffer());
-        Console.write(bufferToAnsi(buffer, getGenerationBuffer()), false);
+            iterate();
+            
+            Console.write(HOME, false);
+            //Console.log(getGenerationBuffer().toString());
+            //streamBuffer(buffer, getGenerationBuffer());
+            Console.write(bufferToAnsi(buffer, getGenerationBuffer()), false);
+        }
         //Console.write(RESET);
     }
     //Console.write(ESC + "[48;2;2;3;99 179m Select RGB foreground color", false);
