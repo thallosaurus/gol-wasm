@@ -1,3 +1,4 @@
+import { Console } from "as-wasi/assembly";
 import { ALIVE } from ".";
 
 export default class GenerationBuffer {
@@ -20,11 +21,19 @@ export default class GenerationBuffer {
             }
 
         }
+    }
+    public getAsUint8(): Uint8Array {
+        let c = new Uint8Array(this.buffer.length);
+        let dv = new DataView(c.buffer);
 
-        /*this.buffer.forEach((v: u8, i: u32, self: Uint8Array) => {
-            //buffer
+        for (let i = 0; i < this.buffer.length; i++) {
+            dv.setUint8(i, this.buffer[i]);
+        }
 
-        });*/
-        //console.log(this.buffer.toString());
+/*        Console.log(this.buffer.toString());
+        Console.log(c.byteLength.toString());*/
+
+        //c.set(this.buffer);
+        return c;
     }
 }

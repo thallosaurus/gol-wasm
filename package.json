@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "@assemblyscript/wasi-shim": "^0.1.0",
     "assemblyscript": "^0.27.5"
   },
   "type": "module",
@@ -17,11 +18,13 @@
   "scripts": {
     "asbuild:debug": "asc assembly/index.ts --target debug",
     "asbuild:release": "asc assembly/index.ts --target release",
-    "asbuild": "npm run asbuild:debug && npm run asbuild:release",
+    "asbuild:wasi": "asc assembly/Cli.ts --target wasi --use abort=assembly/Cli/wasiabort --use seed=assembly/Cli/seed",
+    "asbuild": "npm run asbuild:debug && npm run asbuild:release && npm run asbuild:wasi",
     "test": "node tests",
     "start": "npx serve ."
   },
   "dependencies": {
+    "ansi-styles": "^6.2.1",
     "as-wasi": "^0.6.0"
   }
 }

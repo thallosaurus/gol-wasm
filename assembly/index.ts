@@ -5,14 +5,9 @@ export {
   ALIVE,
   DEAD,
   setWorld,
-  getAsString,
+  getAsStringDebug,
   getWorldPointer,
   getGenerationBufferPointer,
-  setWorldSize
+  setWorldSize,
+  getGenerationBuffer
 } from "./GameOfLife";
-
-/*import { CommandLine, Console, Environ } from "as-wasi/assembly";
-
-export function _start(): void {
-  Console.log("Hello WASI!");
-}*/

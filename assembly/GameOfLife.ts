@@ -91,7 +91,7 @@ export function getWorldPointer(): usize {
   return buffer.dataStart;
 }
 
-export function getAsString(): string {
+export function getAsStringDebug(): string {
   let str = "";
 
   for (let y: u8 = 0; y < HEIGHT; y++) {
@@ -103,6 +103,10 @@ export function getAsString(): string {
   }
 
   return str;
+}
+
+export function getGenerationBuffer(): Uint8Array {
+    return genBuffer.getAsUint8();
 }
 
 export function getGenerationBufferPointer(): usize {
