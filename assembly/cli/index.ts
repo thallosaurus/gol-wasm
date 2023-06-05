@@ -83,7 +83,7 @@ function getColorCell(fg: u8, bg: u8): string {
     if (bg > 0) {
         return rgbToAnsi(char_, 0, 0, fg, bg, bg, bg);
     } else {
-        return " ";
+        return RESET + " ";
     }
 }
 
