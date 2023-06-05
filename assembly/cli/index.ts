@@ -8,7 +8,7 @@ import {
 
 //import { wasi_crypto } from '@assemblyscript/wasi-shim/assembly/wasi_crypto';
 
-import { randomize, buffer, iterate, ALIVE, DEAD, setWorld, getAsStringDebug, getWorldPointer, getGenerationBufferPointer, getGenerationBuffer, setWorldSize } from "./GameOfLife";
+import { randomize, buffer, iterate, ALIVE, getGenerationBuffer, setWorldSize } from "../GameOfLife";
 //import styles from 'ansi-styles';
 // ANSI Escape
 const ESC: string = "\u001b";
@@ -23,8 +23,9 @@ const SHOW_CURSOR = ESC + "[?25h";
 
 export function main(): void {
     //parseArguments(CommandLine.all);
-    setWorldSize(238, 67);
+    setWorldSize(80, 24);
     randomize();
+    iterate();
     //Console.log(d.toString());
     write(CLEAR);
     write(HIDE_CURSOR);
@@ -51,9 +52,6 @@ export function main(): void {
         //Console.write(RESET);
         write(RESET);
     }
-
-
-    //Console.write(ESC + "[48;2;2;3;99 179m Select RGB foreground color", false);
 }
 
 function streamBuffer(fgbuf: Uint8Array, bgbuf: Uint8Array): void {

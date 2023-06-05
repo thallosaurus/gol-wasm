@@ -84,7 +84,7 @@ export function setWorldSize(w: u32, h: u32): void {
   WIDTH = w;
   HEIGHT = h;
   buffer = new Uint8Array(WIDTH * HEIGHT);
-  genBuffer = new GenerationBuffer(w, h);
+  genBuffer = new GenerationBuffer(WIDTH, HEIGHT);
 }
 
 export function getWorldPointer(): usize {
