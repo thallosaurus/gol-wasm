@@ -6,4 +6,4 @@ cp build/release.js out/build/
 cp build/wasi.wasm out/build/
 
 mkdir -p out/build/public
-cp -r public/ out/build/public/
+cp -r public/ out/build/
