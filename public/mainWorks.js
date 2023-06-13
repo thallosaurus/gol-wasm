@@ -1,7 +1,9 @@
 import { memory, randomize, buffer, iterate, ALIVE, DEAD, setWorld, getAsStringDebug, getWorldPointer, getGenerationBufferPointer, setWorldSize } from "gol-wasm";
 // window.addEventListener("load", (ev) => {
 const canvas = document.querySelector("#precanvas");
-const ctx = document.querySelector("#canvas").getContext("2d");
+const ccanvas = document.querySelector("#canvas")
+
+const ctx = ccanvas.getContext("2d");
 //const div = document.querySelector("div:has(pre)");
 const controls = document.querySelector("#controls");
 const fpscounter = document.querySelector("#fpsCounter");
@@ -149,3 +151,5 @@ setWorld(newWorld);
 
 console.log(getWorldPointer());
 requestAnimationFrame(loop);
+
+let worker = new Worker("public/worker.js");
