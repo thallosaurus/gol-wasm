@@ -14,13 +14,13 @@ let mouseY = 0;
 const TILE_WIDTH = 4;
 const TILE_HEIGHT = 4;
 
-const w = 255;
-const h = 255;
+const MAP_WIDTH = 255;
+const MAP_HEIGHT = 255;
 
 let mode = document.querySelector("input[name='mode']:checked").id;
 
-ctx.canvas.width = w * TILE_WIDTH;
-ctx.canvas.height = h * TILE_HEIGHT;
+ctx.canvas.width = MAP_WIDTH * TILE_WIDTH;
+ctx.canvas.height = MAP_HEIGHT * TILE_HEIGHT;
 
 ctx.canvas.addEventListener("click", (ev) => {
     randomize();
@@ -68,9 +68,9 @@ const loop = (ts) => {
 
             //shadows
             let shadows = new DataView(memory.buffer, getGenerationBufferPointer());
-            for (let y = 0; y < h; y++) {
-                for (let x = 0; x < h; x++) {
-                    let i = (y * w) + x;
+            for (let y = 0; y < MAP_HEIGHT; y++) {
+                for (let x = 0; x < MAP_HEIGHT; x++) {
+                    let i = (y * MAP_WIDTH) + x;
                     //console.log(
                     let v = shadows.getUint8(i);
                     let v_f = v / 255;
@@ -87,9 +87,9 @@ const loop = (ts) => {
             }
 
             let dv = new DataView(memory.buffer, getWorldPointer());
-            for (let y = 0; y < h; y++) {
-                for (let x = 0; x < h; x++) {
-                    let i = (y * w) + x;
+            for (let y = 0; y < MAP_HEIGHT; y++) {
+                for (let x = 0; x < MAP_HEIGHT; x++) {
+                    let i = (y * MAP_WIDTH) + x;
                     //console.log(
                     let v = dv.getUint8(i);
                     if (v == ALIVE) {
@@ -140,10 +140,10 @@ setWorld(newWorld);*/
 //}, 10000);
 
 
-setWorldSize(w, h);
+setWorldSize(MAP_WIDTH, MAP_HEIGHT);
 //randomize();
 
-let newWorld = new Uint8Array(w * h).map((v, i) => {
+let newWorld = new Uint8Array(MAP_WIDTH * MAP_HEIGHT).map((v, i) => {
     //console.log(i & 1);
     return (i & 1) ? ALIVE : DEAD;
 });
