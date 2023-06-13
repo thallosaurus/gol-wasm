@@ -1,37 +1,61 @@
-import { memory, randomize, buffer, iterate, ALIVE, DEAD, setWorld, getAsStringDebug, getWorldPointer, getGenerationBufferPointer, setWorldSize } from "../build/release.js";
+import { memory, randomize, iterate, ALIVE, getWorldPointer, getGenerationBufferPointer, setWorldSize, setWorld } from "../build/release.js";
 //const { memory, randomize, buffer, iterate, ALIVE, DEAD, setWorld, getAsStringDebug, getWorldPointer, getGenerationBufferPointer, setWorldSize } = import("../build/release.js");
 
 const TILE_WIDTH = 4;
 const TILE_HEIGHT = 4;
 
-const MAP_WIDTH = 255;
-const MAP_HEIGHT = 255;
+let MAP_WIDTH = 0;
+let MAP_HEIGHT = 0;
+
 let ctx = null;
 let framecount = 0;
 let idleCounter = 0;
 const targetFps = 60;
 const intervalFps = 1000 / targetFps;
-let lastRun = Date.now();
+let lastRun = performance.now();
+
+let fullCount = 0;
 
 self.addEventListener("message", (msg) => {
     switch (msg.data.type) {
         case "init":
-
             let c = msg.data.canvas;
 
             ctx = c.getContext("2d");
+            MAP_WIDTH = msg.data.width;
+            MAP_HEIGHT = msg.data.height;
 
             c.width = MAP_WIDTH * TILE_WIDTH;
             c.height = MAP_HEIGHT * TILE_HEIGHT;
 
+            setWorldSize(msg.data.width, msg.data.height);
+            //randomize();
+                        /*let newWorld = new Uint8Array(MAP_WIDTH * MAP_HEIGHT).map((v, i) => {
+                //console.log(i & 1);
+                return (i & 1) ? ALIVE : DEAD;
+            });*/
+            if (msg.data.data) {
+                setWorld(msg.data.data);
+            } else {
+                randomize();
+            }
 
-            setWorldSize(MAP_WIDTH, MAP_HEIGHT);
-            randomize();
             break;
 
         case "randomize":
             randomize();
-        break;
+            break;
+
+        case "world":
+            setWorldSize(msg.data.width, msg.data.height);
+            //randomize();
+
+            /*let newWorld = new Uint8Array(MAP_WIDTH * MAP_HEIGHT).map((v, i) => {
+                //console.log(i & 1);
+                return (i & 1) ? ALIVE : DEAD;
+            });*/
+            setWorld(msg.data.data);
+            break;
 
         default:
             console.log(msg);
@@ -40,11 +64,12 @@ self.addEventListener("message", (msg) => {
 });
 
 const loop = (ts) => {
-    let elapsed = Date.now() - lastRun;
+    requestAnimationFrame(loop);
+    let elapsed = performance.now() - lastRun;
 
     if (ctx && elapsed > intervalFps) {
         iterate();
-        lastRun = Date.now();
+        lastRun = performance.now();
 
         //requestAnimationFrame(drawToCanvas);
         ctx.fillStyle = "black";
@@ -55,17 +80,12 @@ const loop = (ts) => {
         for (let y = 0; y < MAP_HEIGHT; y++) {
             for (let x = 0; x < MAP_HEIGHT; x++) {
                 let i = (y * MAP_WIDTH) + x;
-                //console.log(
                 let v = shadows.getUint8(i);
                 let v_f = v / 255;
-                //if (v == ALIVE) {
-                /*let r = Math.sin(ts / 1000) * v_f;
-                let g = Math.cos(ts / 1000) * v_f;
-                let b = Math.tan(ts / 1000) * v_f;*/
+
                 let c = `rgba(${255}, ${255}, ${255}, ${v_f})`;
 
                 ctx.fillStyle = c;
-                //console.log(c);
                 ctx.fillRect(x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
             }
         }
@@ -74,7 +94,6 @@ const loop = (ts) => {
         for (let y = 0; y < MAP_HEIGHT; y++) {
             for (let x = 0; x < MAP_HEIGHT; x++) {
                 let i = (y * MAP_WIDTH) + x;
-                //console.log(
                 let v = dv.getUint8(i);
                 if (v == ALIVE) {
                     ctx.fillStyle = "blue";
@@ -85,7 +104,7 @@ const loop = (ts) => {
         framecount++;
     }
     idleCounter++;
-    requestAnimationFrame(loop);
+    fullCount++;
 }
 
 setInterval(() => {
@@ -103,4 +122,4 @@ setInterval(() => {
 
 requestAnimationFrame(loop);
 
-postMessage({type: "init"});
+postMessage({ type: "init" });

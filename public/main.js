@@ -22,7 +22,10 @@ window.addEventListener("load", (ev) => {
                 break;
 
             case "init":
-                worker.postMessage({ type: "init", canvas }, [canvas]);
+                let newWorld = new Uint8Array(255 * 255).map((v, i) => {
+                    return (i & 1) ? 1 : 0;
+                });
+                worker.postMessage({ type: "init", canvas, data: newWorld, width: 255, height: 255 }, [canvas]);
                 break;
         }
     });
