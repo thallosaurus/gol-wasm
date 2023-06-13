@@ -9,6 +9,7 @@
         const ctx = document.querySelector("#canvas").getContext("2d");
         //const div = document.querySelector("div:has(pre)");
         const controls = document.querySelector("#controls");
+        const fpscounter = document.querySelector("#fpsCounter");
 
         let mouseX = 0;
         let mouseY = 0;
@@ -44,14 +45,24 @@
             iterate();
         });
 
-        let lastRun = 0;
+
+        let framecount = 0;
+        const targetFps = 60;
+        const intervalFps = 1000 / targetFps;
+        let lastRun = Date.now();
+
+        let avg = [];
 
         const loop = (ts) => {
-            if (Date.now() > lastRun + 10) {
+            // if (Date.now() > lastRun + 10) {
+            // framecount++;
+            iterate();
+            // }
 
-                iterate();
-            }
+            // lastRun = Date.now();
+            let elapsed = Date.now() - lastRun;
 
+            if (elapsed > intervalFps) {
                 lastRun = Date.now();
 
                 if (mode == "can") {
@@ -95,8 +106,29 @@
                     canvas.innerText = getAsString();
                 }
 
+                framecount++;
+                // if (fpscounter) {
+                // fpscounter.innerText = avg.reduce((p, c, i, arr) => {
+                //     // console.log(p, c, i, arr);
+                //     return p + c;
+                // }, 0);
+                // }
+            }
+
             requestAnimationFrame(loop);
         }
+
+        setInterval(() => {
+            fpscounter.innerText = framecount + "FPS";
+            //     // console.log(p, c, i, arr);
+            //     return p + c;
+            // }, 0);
+            framecount = 0;
+            // if (avg.length > 10) {
+            // avg.shift();
+            // }
+            // avg.push(framecount);
+        }, 1000);
 
         //randomize();
         //setTimeout(() => {
@@ -162,6 +194,7 @@
 
             </pre>
 
+        <p id="fpsCounter">0FPS</p>
         <canvas id="canvas">
 
         </canvas>
