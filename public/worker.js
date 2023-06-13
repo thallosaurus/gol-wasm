@@ -13,46 +13,35 @@ const targetFps = 60;
 const intervalFps = 1000 / targetFps;
 let lastRun = Date.now();
 
-/*self.onmessage = (msg) => {
-    console.log("lol", msg);
-
-    let c = msg.data.canvas;
-
-    ctx = c.getContext("2d");
-
-    c.width = MAP_WIDTH * TILE_WIDTH;
-    c.height = MAP_HEIGHT * TILE_HEIGHT;
-
-
-    setWorldSize(MAP_WIDTH, MAP_HEIGHT);
-    randomize();
-    
-    requestAnimationFrame(drawToCanvas);
-
-    //post test message back
-    self.postMessage({title: "ok", msg: "test"});
-};*/
-
 self.addEventListener("message", (msg) => {
-    console.log("lol", msg);
+    switch (msg.data.type) {
+        case "init":
 
-    let c = msg.data.canvas;
+            let c = msg.data.canvas;
 
-    ctx = c.getContext("2d");
+            ctx = c.getContext("2d");
 
-    c.width = MAP_WIDTH * TILE_WIDTH;
-    c.height = MAP_HEIGHT * TILE_HEIGHT;
+            c.width = MAP_WIDTH * TILE_WIDTH;
+            c.height = MAP_HEIGHT * TILE_HEIGHT;
 
 
-    setWorldSize(MAP_WIDTH, MAP_HEIGHT);
-    randomize();
+            setWorldSize(MAP_WIDTH, MAP_HEIGHT);
+            randomize();
+            break;
+
+        case "randomize":
+            randomize();
+        break;
+
+        default:
+            console.log(msg);
+            break;
+    }
 });
-
-
 
 const loop = (ts) => {
     let elapsed = Date.now() - lastRun;
-    
+
     if (ctx && elapsed > intervalFps) {
         iterate();
         lastRun = Date.now();
@@ -70,9 +59,9 @@ const loop = (ts) => {
                 let v = shadows.getUint8(i);
                 let v_f = v / 255;
                 //if (v == ALIVE) {
-                let r = Math.sin(ts / 1000) * v_f;
+                /*let r = Math.sin(ts / 1000) * v_f;
                 let g = Math.cos(ts / 1000) * v_f;
-                let b = Math.tan(ts / 1000) * v_f;
+                let b = Math.tan(ts / 1000) * v_f;*/
                 let c = `rgba(${255}, ${255}, ${255}, ${v_f})`;
 
                 ctx.fillStyle = c;
@@ -113,3 +102,5 @@ setInterval(() => {
 }, 1000);
 
 requestAnimationFrame(loop);
+
+postMessage({type: "init"});

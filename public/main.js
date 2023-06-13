@@ -1,11 +1,18 @@
 window.addEventListener("load", (ev) => {
-    let canvas = document.querySelector("#canvas").transferControlToOffscreen();
+    let c = document.querySelector("#canvas");
 
-    let worker = new Worker("public/worker.js", {
-        type: "module",
+    c.addEventListener("click", () => {
+        worker.postMessage({
+            type: "randomize"
+        });
     });
 
-    console.log(worker);
+    let canvas = c.transferControlToOffscreen();
+
+    let worker = new Worker("public/worker.js", {
+        name: "ui",
+        type: "module",
+    });
 
     worker.addEventListener("message", (msg) => {
         switch (msg.data.type) {
@@ -13,10 +20,10 @@ window.addEventListener("load", (ev) => {
                 document.querySelector("#fpsCounter").innerText = `${msg.data.payload.fps}FPS`;
                 document.querySelector("#idleCounter").innerText = `${msg.data.payload.idle}FPS`;
                 break;
-        }
-    })
 
-    setTimeout(() => {
-        worker.postMessage({ canvas }, [canvas]);
-    }, 1000);
+            case "init":
+                worker.postMessage({ type: "init", canvas }, [canvas]);
+                break;
+        }
+    });
 });
