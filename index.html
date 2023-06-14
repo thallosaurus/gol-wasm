@@ -23,19 +23,18 @@
             margin: 0px;
         }
 
-        #fpsCounter,
-        #idleCounter {
+        #counters {
             text-align: center;
         }
     </style>
 
-<script type="importmap">
+    <script type="importmap">
     {
       "imports": {
         "gol-wasm": "./build/release.js"
       }
     }
-  </script>  
+  </script>
 
     <script type="module" src="public/main.js"></script>
 </head>
@@ -55,8 +54,17 @@
 
             </pre>
 
-        <p id="fpsCounter">0FPS</p>
-        <p id="idleCounter">0FPS</p>
+        <div id="counters">
+
+            <p>
+                <span id="fpsCounter">0</span>
+                FPS
+            </p>
+            <p>
+                <span id="idleCounter">0</span>
+                FPS
+            </p>
+        </div>
         <canvas id="canvas">
 
         </canvas>

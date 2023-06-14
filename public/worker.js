@@ -29,11 +29,6 @@ self.addEventListener("message", (msg) => {
             c.height = MAP_HEIGHT * TILE_HEIGHT;
 
             setWorldSize(msg.data.width, msg.data.height);
-            //randomize();
-                        /*let newWorld = new Uint8Array(MAP_WIDTH * MAP_HEIGHT).map((v, i) => {
-                //console.log(i & 1);
-                return (i & 1) ? ALIVE : DEAD;
-            });*/
             if (msg.data.data) {
                 setWorld(msg.data.data);
             } else {
@@ -48,12 +43,6 @@ self.addEventListener("message", (msg) => {
 
         case "world":
             setWorldSize(msg.data.width, msg.data.height);
-            //randomize();
-
-            /*let newWorld = new Uint8Array(MAP_WIDTH * MAP_HEIGHT).map((v, i) => {
-                //console.log(i & 1);
-                return (i & 1) ? ALIVE : DEAD;
-            });*/
             setWorld(msg.data.data);
             break;
 

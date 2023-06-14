@@ -17,8 +17,8 @@ window.addEventListener("load", (ev) => {
     worker.addEventListener("message", (msg) => {
         switch (msg.data.type) {
             case "fps":
-                document.querySelector("#fpsCounter").innerText = `${msg.data.payload.fps}FPS`;
-                document.querySelector("#idleCounter").innerText = `${msg.data.payload.idle}FPS`;
+                document.querySelector("#fpsCounter").innerText = msg.data.payload.fps;
+                document.querySelector("#idleCounter").innerText = msg.data.payload.idle;
                 break;
 
             case "init":
