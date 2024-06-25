@@ -7,7 +7,7 @@ A WebAssembly PoC written in [AssemblyScript](https://www.assemblyscript.org)
 ## Getting Started
 1. Clone the Repo and change to it
 2. Run "npm install" to install all dependencies
-3. To run the development environment, run `npm run asbuild:debug` to build it
+3. To run the development environment, run `npm run asbuild:release` to build it
 4. and `npm run start` to start the local dev server. If it wants to install `serve`, accept it by typing `y`.
 5. Open your browser and go to `http://localhost:3000` and watch the Game of Life unfold!
 
